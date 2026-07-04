@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>VÜ — Take a pause</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="device">
+  <div class="screen-stack">
+
+    <!-- SCREEN 1: HOME -->
+    <section class="screen screen--home" id="screen-home" data-screen="home" aria-hidden="false">
+      <header class="topbar">
+        <button class="logo-btn" data-nav="home" aria-label="Home">
+          <img class="logo" src="assets/images/logo-offwhite.png" alt="VÜ" />
+        </button>
+        <button class="icon-btn bell-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" class="bell-icon"><path d="M12 3a5 5 0 0 0-5 5v2.6c0 .7-.24 1.38-.68 1.93L4.7 14.9c-.7.86-.08 2.14 1.02 2.14h12.56c1.1 0 1.72-1.28 1.02-2.14l-1.62-2.37A3.1 3.1 0 0 1 17 10.6V8a5 5 0 0 0-5-5Z"/><path d="M9.5 19a2.5 2.5 0 0 0 5 0"/></svg>
+          <span class="notif-dot"></span>
+        </button>
+      </header>
+
+      <div class="stage">
+        <button class="pause-trigger" data-action="start-vu" aria-label="Take a VÜ">
+          <div class="hero-assembly">
+            <img class="hero-lightline" src="assets/images/elements/light-line.png" alt="" />
+            <img class="hero-rainbow" src="assets/images/elements/rainbow.png" alt="" />
+            <img class="hero-bars" src="assets/images/elements/bars.png" alt="" />
+          </div>
+          <svg class="pause-arc" viewBox="0 0 160 160" aria-hidden="true">
+            <circle class="pause-arc-track" cx="80" cy="80" r="70" />
+            <circle class="pause-arc-fill" cx="80" cy="80" r="70" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="copy-block">
+        <h1 class="headline">Take a VÜ</h1>
+        <span class="hr-fade"></span>
+        <p class="subline">Ready for a pause?</p>
+      </div>
+
+      <nav class="bottom-nav">
+        <button class="nav-btn" data-nav="together" aria-label="Together">
+          <img src="assets/icons/icon-ring.png" alt="" />
+        </button>
+        <button class="nav-btn nav-btn--current" data-action="start-vu" aria-label="Take a VÜ">
+          <img src="assets/icons/icon-pause.png" alt="" />
+        </button>
+        <button class="nav-btn" data-nav="moments" aria-label="VÜ Moments">
+          <img src="assets/icons/icon-refresh.png" alt="" />
+        </button>
+      </nav>
+    </section>
+
+    <!-- SCREEN 2: STEP OUTSIDE -->
+    <section class="screen screen--photo" id="screen-outside" data-screen="outside" aria-hidden="true">
+      <div class="photo-bg photo-bg--outside"></div>
+      <div class="color-leak color-leak--outside"></div>
+      <div class="photo-scrim"></div>
+
+      <header class="topbar topbar--minimal">
+        <h1 class="headline headline--top">Step outside</h1>
+      </header>
+
+      <div class="floating-icon">
+        <div class="hero-assembly">
+          <img class="hero-bars" src="assets/images/elements/bars.png" alt="Pause" />
+        </div>
+      </div>
+
+      <div class="copy-block copy-block--bottom">
+        <p class="subline subline--stacked">Step outside.<br />Leave the rush behind.</p>
+        <button class="pill-btn" data-action="go-breathe">I'm outside</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 2b: TAKE A BREATH (bubble-expansion) -->
+    <section class="screen screen--breathe" id="screen-breathe" data-screen="breathe" aria-hidden="true">
+      <div class="breathe-fade">
+        <div class="copy-block copy-block--breathe">
+          <p class="subline subline--stacked">Take a breath.<br />Blow.</p>
+        </div>
+      </div>
+
+      <div class="bubble-immersive">
+        <img class="hero-bubble-big" src="assets/images/hero-bubble.png" alt="" />
+      </div>
+
+      <div class="floating-icon">
+        <div class="hero-assembly">
+          <img class="hero-bars" src="assets/images/elements/bars.png" alt="" />
+        </div>
+      </div>
+
+      <div class="breathe-wash"></div>
+
+      <button class="close-btn" data-action="end-breathe" aria-label="End the pause">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </section>
+
+    <!-- SCREEN 3: HOW DO YOU FEEL -->
+    <section class="screen screen--feel" id="screen-feel" data-screen="feel" aria-hidden="true">
+      <div class="photo-bg photo-bg--feel"></div>
+      <div class="color-leak color-leak--feel"></div>
+      <div class="photo-scrim photo-scrim--feel"></div>
+
+      <div class="feel-content">
+        <h1 class="headline headline--stacked">How do<br />you feel?</h1>
+
+        <div class="option-list" role="radiogroup" aria-label="How do you feel">
+          <button class="option-pill" role="radio" aria-checked="false" data-value="clearer">
+            <span class="option-radio"></span>
+            <span class="option-label">Clearer</span>
+          </button>
+          <button class="option-pill" role="radio" aria-checked="false" data-value="lighter">
+            <span class="option-radio"></span>
+            <span class="option-label">Lighter</span>
+          </button>
+          <button class="option-pill" role="radio" aria-checked="false" data-value="focused">
+            <span class="option-radio"></span>
+            <span class="option-label">Focused</span>
+          </button>
+        </div>
+
+        <p class="subline subline--stacked subline--small">Every pause<br />changes your view.</p>
+
+        <button class="confirm-btn" data-action="confirm-feel" aria-label="Confirm">
+          <svg viewBox="0 0 24 24"><path d="M5 12.5 10 17l9-10"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 4: TOGETHER -->
+    <section class="screen" id="screen-together" data-screen="together" aria-hidden="true">
+      <div class="photo-bg photo-bg--together"></div>
+      <div class="color-leak color-leak--together"></div>
+      <div class="photo-scrim photo-scrim--together"></div>
+
+      <header class="topbar">
+        <button class="logo-btn" data-nav="home" aria-label="Home">
+          <img class="logo" src="assets/images/logo-offwhite.png" alt="VÜ" />
+        </button>
+        <button class="icon-btn bell-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" class="bell-icon"><path d="M12 3a5 5 0 0 0-5 5v2.6c0 .7-.24 1.38-.68 1.93L4.7 14.9c-.7.86-.08 2.14 1.02 2.14h12.56c1.1 0 1.72-1.28 1.02-2.14l-1.62-2.37A3.1 3.1 0 0 1 17 10.6V8a5 5 0 0 0-5-5Z"/><path d="M9.5 19a2.5 2.5 0 0 0 5 0"/></svg>
+          <span class="notif-dot"></span>
+        </button>
+      </header>
+
+      <h1 class="headline headline--together">Take a VÜ together.</h1>
+
+      <div class="friends-online">
+        <span class="online-dot"></span>
+        <span class="friends-count">3 friends online</span>
+      </div>
+
+      <ul class="friends-list">
+        <li class="friend-row">
+          <span class="avatar">A</span>
+          <span class="friend-meta">
+            <span class="friend-name">Alex</span>
+            <span class="friend-status">Online</span>
+          </span>
+          <button class="add-btn" aria-label="Invite Alex">+</button>
+        </li>
+        <li class="friend-row">
+          <span class="avatar">M</span>
+          <span class="friend-meta">
+            <span class="friend-name">Miya</span>
+            <span class="friend-status">Online</span>
+          </span>
+          <button class="add-btn" aria-label="Invite Miya">+</button>
+        </li>
+        <li class="friend-row">
+          <span class="avatar">J</span>
+          <span class="friend-meta">
+            <span class="friend-name">Jordan</span>
+            <span class="friend-status">Online</span>
+          </span>
+          <button class="add-btn" aria-label="Invite Jordan">+</button>
+        </li>
+      </ul>
+
+      <button class="pill-btn pill-btn--wide" data-action="start-group">Start a group VÜ</button>
+
+      <nav class="bottom-nav">
+        <button class="nav-btn nav-btn--current" data-nav="together" aria-label="Together">
+          <img src="assets/icons/icon-together.png" alt="" />
+        </button>
+        <button class="nav-btn" data-nav="home" aria-label="Home">
+          <img src="assets/icons/icon-pause.png" alt="" />
+        </button>
+        <button class="nav-btn" data-nav="moments" aria-label="VÜ Moments">
+          <img src="assets/icons/icon-refresh.png" alt="" />
+        </button>
+      </nav>
+    </section>
+
+    <!-- SCREEN 5: VÜ MOMENTS -->
+    <section class="screen screen--moments" id="screen-moments" data-screen="moments" aria-hidden="true">
+      <header class="topbar">
+        <h1 class="headline moments-title">VÜ moments</h1>
+        <button class="icon-btn add-moment-btn" data-action="start-vu" aria-label="Start a new VÜ">
+          <svg viewBox="0 0 24 24" class="plus-icon"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </header>
+
+      <ul class="moments-list">
+        <li class="moment-card" style="--bg-image:url('assets/images/moment-solo-lights.jpg'); --bg-position: 50% 55%;">
+          <div class="moment-photo">
+            <div class="moment-wash"></div>
+            <div class="moment-spectrum"></div>
+          </div>
+          <div class="moment-footer">
+            <span class="moment-title">Outside the office</span>
+            <span class="moment-time"><span class="moment-dot"></span>Today, 12:30</span>
+          </div>
+        </li>
+        <li class="moment-card" style="--bg-image:url('assets/images/moment-motion-blur.jpg'); --bg-position: 50% 20%;">
+          <div class="moment-photo">
+            <div class="moment-wash"></div>
+            <div class="moment-spectrum"></div>
+          </div>
+          <div class="moment-footer">
+            <span class="moment-title">Outside the club</span>
+            <span class="moment-time"><span class="moment-dot"></span>Yesterday, 23:45</span>
+          </div>
+        </li>
+        <li class="moment-card" style="--bg-image:url('assets/images/moment-running.webp'); --bg-position: 45% 55%;">
+          <div class="moment-photo">
+            <div class="moment-wash"></div>
+            <div class="moment-spectrum"></div>
+          </div>
+          <div class="moment-footer">
+            <span class="moment-title">Outside the bar</span>
+            <span class="moment-time"><span class="moment-dot"></span>Yesterday, 21:10</span>
+          </div>
+        </li>
+        <li class="moment-card" style="--bg-image:url('assets/images/moment-crowd-alone.webp'); --bg-position: 48% 60%;">
+          <div class="moment-photo">
+            <div class="moment-wash"></div>
+            <div class="moment-spectrum"></div>
+          </div>
+          <div class="moment-footer">
+            <span class="moment-title">Outside campus</span>
+            <span class="moment-time"><span class="moment-dot"></span>2 days ago</span>
+          </div>
+        </li>
+      </ul>
+
+      <nav class="bottom-nav">
+        <button class="nav-btn" data-nav="together" aria-label="Together">
+          <img src="assets/icons/icon-ring.png" alt="" />
+        </button>
+        <button class="nav-btn" data-nav="home" aria-label="Home">
+          <img src="assets/icons/icon-pause.png" alt="" />
+        </button>
+        <button class="nav-btn nav-btn--current" data-nav="moments" aria-label="VÜ Moments">
+          <img src="assets/icons/icon-refresh.png" alt="" />
+        </button>
+      </nav>
+    </section>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

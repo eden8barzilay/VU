@@ -1,0 +1,883 @@
+/* ---------- Font ---------- */
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/fonts/GeneralSans-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root{
+  --bg: #030303;
+  --ink: #f6f4ee;
+  --ink-dim: rgba(246,244,238,0.62);
+  --ink-faint: rgba(246,244,238,0.34);
+  --line: rgba(246,244,238,0.28);
+  --line-soft: rgba(246,244,238,0.16);
+  --gold: #f4e6c1;
+
+  --tracking: 0.15em;
+
+  --device-w: 402px;
+  --device-h: 874px;
+}
+
+*{ box-sizing: border-box; }
+
+html, body{
+  height: 100%;
+  margin: 0;
+  background: #0a0a0a;
+}
+
+body{
+  font-family: 'General Sans', sans-serif;
+  color: var(--ink);
+  letter-spacing: var(--tracking);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(circle at 50% 0%, #141414 0%, #060606 55%, #000 100%);
+}
+
+button, input{
+  font-family: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- Device frame ---------- */
+.device{
+  position: relative;
+  width: 100%;
+  max-width: var(--device-w);
+  height: 100dvh;
+  max-height: var(--device-h);
+  background: var(--bg);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+@media (min-width: 460px) and (min-height: 900px){
+  .device{
+    border-radius: 54px;
+    box-shadow:
+      0 0 0 10px #0d0d0d,
+      0 0 0 11px #232323,
+      0 40px 90px rgba(0,0,0,0.65);
+  }
+}
+
+.screen-stack{
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.screen{
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: max(22px, env(safe-area-inset-top)) 24px max(20px, env(safe-area-inset-bottom));
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .38s ease;
+  background: var(--bg);
+}
+
+.screen.is-active{
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-top: 6px;
+  margin-bottom: 8px;
+}
+
+.logo-btn{
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  margin: -4px;
+}
+
+.logo{
+  height: 22px;
+  width: auto;
+  display: block;
+}
+
+.icon-btn{
+  position: absolute;
+  right: 0;
+  top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+}
+
+.bell-icon{
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.notif-dot{
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff6d8, #ffd94a 70%);
+  box-shadow: 0 0 6px 1px rgba(255, 217, 74, 0.7);
+}
+
+.topbar--minimal{ justify-content: center; margin-top: 4px; }
+
+/* ---------- Stage + pause icon ---------- */
+.stage{
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  position: relative;
+}
+
+/* ---------- Home: pause trigger, beam + arc ---------- */
+.screen--home{ padding-left: 0; padding-right: 0; }
+.screen--home .topbar,
+.screen--home .copy-block,
+.screen--home .bottom-nav{ padding-left: 24px; padding-right: 24px; }
+
+.pause-trigger{
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+/* Hero visual assembled from separate light/prism elements instead of one flattened image.
+   Anchor points below come from each source element's own crop (bar edges, rainbow apex,
+   light-line tip) so the beam, bars and incoming ray line up at a shared convergence point. */
+.hero-assembly{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 402 / 256;
+}
+
+.hero-assembly img{
+  position: absolute;
+  height: auto;
+  max-width: none;
+}
+
+/* bars group center: x=200.3/402=49.8%, y=140/256=54.7% (also the pause-arc center) */
+.hero-bars{
+  z-index: 3;
+  left: 49.8%;
+  top: 54.7%;
+  width: 15.3%;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 7px rgba(255,250,230,0.32));
+}
+
+/* attaches slightly inside the right bar's right edge (rather than exactly on
+   it) so the blurred apex visibly overlaps/merges into the bar instead of
+   leaving a thin gap */
+.hero-rainbow{
+  z-index: 2;
+  left: 55.9%;
+  top: 54.7%;
+  width: 50%;
+  transform: translate(-1.3%, -15%);
+  filter: blur(1.5px);
+}
+
+/* attaches at the left bar's left edge, same height as the bars center.
+   Source art's incoming ray sits at ~45°; rotated around its own tip (the anchor
+   point below) to the ~18° angle shown in the iPhone-16 reference comp. */
+.hero-lightline{
+  z-index: 1;
+  left: 42.35%;
+  top: 54.7%;
+  width: 46%;
+  transform-origin: 95.9% 95.3%;
+  transform: translate(-95.9%, -95.3%) rotate(-27.6deg);
+  filter: drop-shadow(0 0 6px rgba(255,250,230,0.4));
+}
+
+/* bar-center position measured from the source artwork: x=200.3/402=49.8%, y=140/256=54.7% */
+.pause-arc{
+  position: absolute;
+  z-index: 2;
+  top: 54.7%;
+  left: 49.8%;
+  width: 38%;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  overflow: visible;
+}
+
+.pause-arc-track,
+.pause-arc-fill{
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+.pause-arc-track{ stroke: rgba(244,230,193,0.22); }
+
+.pause-arc-fill{
+  stroke: var(--gold);
+  stroke-dasharray: 439.8;
+  stroke-dashoffset: 439.8;
+  filter: drop-shadow(0 0 6px rgba(244,230,193,0.8));
+  transition: stroke-dashoffset 1000ms cubic-bezier(.45,0,.2,1), opacity .5s ease;
+}
+
+.pause-trigger.is-arcing .pause-arc-track,
+.pause-trigger.is-arcing .pause-arc-fill{
+  opacity: 1;
+}
+
+.pause-trigger.is-arcing .pause-arc-fill{
+  stroke-dashoffset: 0;
+}
+
+.pause-trigger.is-arcing .hero-assembly{
+  transition: transform 1000ms cubic-bezier(.45,0,.2,1);
+  transform: scale(1.015);
+}
+
+/* ---------- Photographic backgrounds ---------- */
+.photo-bg{
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  background-size: cover;
+  filter: grayscale(0.15) contrast(1.05) brightness(0.92);
+}
+
+.photo-bg--outside{ background-image: url('assets/images/bg-outside-2.png'); background-position: 68% center; }
+.photo-bg--together{ background-image: url('assets/images/bg-outside-1.png'); background-position: 24% center; }
+.photo-bg--feel{ background-image: url('assets/images/bg-outside-2.png'); background-position: 70% center; filter: grayscale(0.3) contrast(1.05) brightness(0.55) blur(6px); transform: scale(1.06); }
+
+.color-leak{
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  mix-blend-mode: screen;
+  opacity: 0.8;
+}
+
+.color-leak--outside{
+  background: radial-gradient(ellipse 60% 40% at 88% 85%, rgba(120,90,255,0.35), transparent 65%);
+}
+
+.color-leak--together{
+  background:
+    radial-gradient(ellipse 70% 45% at 85% 75%, rgba(255,120,60,0.5), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 95% 100%, rgba(130,90,255,0.4), transparent 65%);
+}
+
+.color-leak--feel{
+  background:
+    radial-gradient(ellipse 80% 50% at 10% 10%, rgba(255,120,60,0.5), transparent 60%),
+    radial-gradient(ellipse 70% 55% at 90% 20%, rgba(255,210,80,0.3), transparent 65%),
+    radial-gradient(ellipse 80% 55% at 5% 60%, rgba(70,210,170,0.28), transparent 60%),
+    radial-gradient(ellipse 90% 65% at 100% 65%, rgba(60,140,255,0.28), transparent 65%),
+    radial-gradient(ellipse 90% 55% at 25% 100%, rgba(140,80,255,0.4), transparent 60%);
+  opacity: 0.9;
+}
+
+/* ---------- Text blocks ---------- */
+.copy-block{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding-bottom: 8px;
+}
+
+.copy-block--bottom{
+  margin-top: auto;
+  gap: 22px;
+  padding-bottom: 6px;
+}
+
+.headline{
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: var(--tracking);
+  margin: 0;
+  text-align: center;
+  text-indent: var(--tracking); /* optically re-center tracked text */
+}
+
+.headline--top{ font-size: 17px; margin-bottom: 4px; }
+.headline--stacked{ line-height: 1.55; font-size: 21px; }
+.headline--together{
+  margin: 56px 0 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.hr-fade{
+  display: block;
+  width: 168px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(244,230,193,0) 0%, rgba(244,230,193,0.9) 50%, rgba(244,230,193,0) 100%);
+  box-shadow: 0 0 10px 1px rgba(244,230,193,0.55);
+}
+
+.subline{
+  font-size: 14.5px;
+  letter-spacing: var(--tracking);
+  text-indent: var(--tracking);
+  color: var(--ink-dim);
+  margin: 0;
+  font-weight: 400;
+}
+
+.subline--stacked{ line-height: 1.5; font-size: 15px; }
+.subline--small{ font-size: 12.5px; color: var(--ink-faint); margin-top: 4px; }
+
+/* ---------- Bottom nav ---------- */
+.bottom-nav{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 30px 4px;
+  margin-top: auto;
+}
+
+.nav-btn{
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  opacity: 0.72;
+  transition: opacity .2s ease;
+}
+
+.nav-btn img{
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.nav-btn--current{ opacity: 1; }
+
+.nav-btn:active{ opacity: 1; }
+
+/* ---------- Screen 2: Step Outside (photo bg) ---------- */
+.screen--photo{ padding-left: 0; padding-right: 0; }
+.screen--photo .topbar,
+.screen--photo .copy-block{ padding-left: 24px; padding-right: 24px; }
+
+.photo-scrim{
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.28) 26%, rgba(0,0,0,0.32) 60%, rgba(0,0,0,0.88) 100%);
+}
+
+.photo-scrim--together{
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.92) 100%);
+}
+
+.photo-scrim--feel{
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.75) 100%);
+}
+
+/* ---------- Screen 3: How do you feel ---------- */
+.screen--feel{ justify-content: center; }
+
+.feel-content{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 34px;
+}
+
+.option-list{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.option-pill{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 17px 22px;
+  border: 1.4px solid var(--ink);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.02);
+  backdrop-filter: blur(6px);
+  transition: border-color .2s ease, background .2s ease;
+}
+
+.option-pill:active{ background: rgba(255,255,255,0.06); }
+
+.option-pill[aria-checked="true"]{
+  border-color: var(--ink);
+  background: rgba(255,255,255,0.07);
+}
+
+.option-radio{
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border-radius: 50%;
+  border: 1.4px solid var(--ink);
+  position: relative;
+}
+
+.option-pill[aria-checked="true"] .option-radio::after{
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.option-label{
+  font-size: 13.5px;
+  font-weight: 400;
+}
+
+.confirm-btn{
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1.4px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.confirm-btn svg{
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Pill buttons ---------- */
+.pill-btn{
+  width: fit-content;
+  white-space: nowrap;
+  margin: 0 auto;
+  padding: 12px 18px;
+  border: 1.4px solid var(--ink);
+  border-radius: 999px;
+  font-size: 12px;
+  text-indent: var(--tracking);
+  font-weight: 400;
+  text-align: center;
+  background: rgba(0,0,0,0.18);
+  backdrop-filter: blur(3px);
+  transition: background .2s ease, transform .15s ease;
+}
+
+.pill-btn:active{ background: rgba(255,255,255,0.08); transform: scale(0.98); }
+
+.pill-btn--wide{ margin-top: 32px; }
+
+/* ---------- Screen 4: Together ---------- */
+#screen-together{ gap: 0; }
+
+.friends-online{
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+  color: var(--ink);
+  margin: auto 0 14px;
+  width: 100%;
+}
+
+.online-dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #34d17a;
+  box-shadow: 0 0 8px 1px rgba(52,209,122,0.8);
+}
+
+.friends-list{
+  list-style: none;
+  margin: 0;
+  padding: 6px 0 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line-soft);
+}
+
+.friend-row{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 2px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.avatar{
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  letter-spacing: 0;
+  color: #000000;
+  background: #FFFBED;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+}
+
+.friend-meta{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.friend-name{
+  font-size: 13.5px;
+}
+
+.friend-status{
+  font-size: 12px;
+  color: var(--ink-faint);
+  letter-spacing: 0;
+}
+
+.add-btn{
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.add-btn:active{ background: rgba(255,255,255,0.08); }
+
+/* ---------- Screen 2b: Take a breath (bubble-expansion) ---------- */
+.screen--breathe{ padding-left: 0; padding-right: 0; align-items: stretch; }
+.screen--breathe .copy-block{ padding-left: 24px; padding-right: 24px; }
+
+.breathe-fade{
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 2.2s ease;
+}
+
+.screen--breathe.is-expanding .breathe-fade{
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Standalone pause icon (bars only), placed at the exact same spot as the
+   home screen's pause button — measured as 44.2% down the device frame.
+   Used on screens that show just the icon without the full beam assembly:
+   Step outside, and the breathe screen (where it lives outside .breathe-fade
+   so it doesn't fade out when the bubble expands). */
+.floating-icon{
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  top: 42.8%;
+  width: 100%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.copy-block--breathe{ padding-bottom: calc(100px + env(safe-area-inset-bottom)); gap: 10px; margin-top: auto; }
+
+/* full-screen bubble that expands to fill the frame, then holds a slow drifting rainbow hue */
+.bubble-immersive{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-bubble-big{
+  width: 58%;
+  height: auto;
+  opacity: 1;
+  transition: transform 6000ms cubic-bezier(.22,.61,.36,1), filter 5000ms ease, opacity 3000ms ease;
+  will-change: transform;
+}
+
+/* scale far enough that the bubble's rim (its colour) fills the frame, but not
+   so far that we zoom past it into the bubble's dark, empty centre */
+.screen--breathe.is-expanding .hero-bubble-big{
+  transform: scale(6.5);
+  filter: blur(2px) saturate(1.35) brightness(1.1);
+}
+
+.screen--breathe.is-immersed .hero-bubble-big{
+  opacity: 0.3;
+}
+
+/* once immersed, a soft full-screen colour wash (sampled from the bubble's
+   own palette) takes over and drifts gently — this is what actually reads
+   as "the whole screen takes on the bubble's hues" */
+.breathe-wash{
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 3500ms ease;
+  background:
+    radial-gradient(circle at 26% 28%, rgba(255,175,220,0.5), transparent 58%),
+    radial-gradient(circle at 74% 22%, rgba(255,205,120,0.45), transparent 58%),
+    radial-gradient(circle at 22% 76%, rgba(120,225,205,0.45), transparent 58%),
+    radial-gradient(circle at 78% 72%, rgba(140,165,255,0.5), transparent 58%),
+    radial-gradient(circle at 50% 50%, rgba(205,150,255,0.35), transparent 62%);
+  filter: saturate(1.25);
+}
+
+.screen--breathe.is-immersed .breathe-wash{
+  opacity: 1;
+  animation: breathe-hue 32s linear infinite;
+}
+
+@keyframes breathe-hue{
+  from{ filter: saturate(1.25) hue-rotate(0deg); }
+  to{ filter: saturate(1.25) hue-rotate(360deg); }
+}
+
+.close-btn{
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: max(28px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1.4px solid rgba(255,255,255,0.55);
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s ease;
+}
+
+.close-btn svg{
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.close-btn:active{ background: rgba(0,0,0,0.45); }
+
+/* ---------- Screen 5: VÜ Moments ---------- */
+.screen--moments{ padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+
+.moments-title{
+  font-size: 18px;
+  margin: 0;
+}
+
+.add-moment-btn{
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transition: background .2s ease;
+}
+
+.add-moment-btn:active{ background: rgba(255,255,255,0.08); }
+
+.add-moment-btn .plus-icon{
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.moments-list{
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
+.moment-card{
+  position: relative;
+  flex: 0 0 auto;
+  height: 196px;
+  border-radius: 18px;
+  overflow: hidden;
+  background-color: #111;
+  border: 1.4px solid var(--ink);
+  display: flex;
+  flex-direction: column;
+}
+
+/* sharp, unblurred photo — fills all remaining space above the footer */
+.moment-photo{
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  opacity: 0.9;
+  background-image: var(--bg-image);
+  background-position: var(--bg-position, 50% 50%);
+  background-size: cover;
+  filter: contrast(0.72) brightness(0.96) saturate(1.05);
+}
+
+/* colorful spectrum wash over the photo — mix-blend-mode: color tints the
+   image with hue while leaving its own luminance/detail intact, so it reads
+   as light washing over the photo rather than a flat color layer on top */
+.moment-wash{
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255,110,170,0.55), transparent 55%),
+    radial-gradient(circle at 82% 12%, rgba(255,195,90,0.5), transparent 55%),
+    radial-gradient(circle at 12% 88%, rgba(80,220,190,0.5), transparent 58%),
+    radial-gradient(circle at 88% 82%, rgba(100,140,255,0.55), transparent 58%),
+    radial-gradient(circle at 50% 50%, rgba(190,110,255,0.35), transparent 62%);
+  mix-blend-mode: color;
+  opacity: 0.3;
+}
+
+/* thin spectrum strip along the top edge of each photo — the brand's
+   pause/prism motif distilled to a small recurring accent */
+.moment-spectrum{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 1;
+  background: linear-gradient(90deg,
+    #ff4d4d, #ff9d4d, #ffe14d, #6bdc7a, #4dc9ff, #7a6bff, #e14dff);
+  box-shadow: 0 0 6px 1px rgba(255,255,255,0.3);
+}
+
+/* solid footer strip below the photo — title/time live here instead of
+   overlaid on the image */
+.moment-footer{
+  flex: 0 0 auto;
+  background: #0c0a09;
+  padding: 13px 16px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.moment-title{
+  font-size: 14.5px;
+  letter-spacing: var(--tracking);
+  color: var(--ink);
+}
+
+.moment-time{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  letter-spacing: 0;
+}
+
+.moment-dot{
+  width: 4px;
+  height: 4px;
+  min-width: 4px;
+  border-radius: 50%;
+  background: #34d17a;
+  box-shadow: 0 0 4px 1px rgba(52,209,122,0.7);
+}
+
+/* ---------- Responsive tuning ---------- */
+@media (max-height: 700px){
+  .headline{ font-size: 18px; }
+  .stage{ min-height: 0; }
+}
+
+@media (max-width: 360px){
+  .screen{ padding-left: 18px; padding-right: 18px; }
+  .headline{ font-size: 18px; }
+}
