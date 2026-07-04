@@ -788,38 +788,27 @@ button, input{
   height: 196px;
   border-radius: 18px;
   overflow: hidden;
-  background-color: #111;
+  background-color: #000;
   border: 1.4px solid var(--ink);
   display: flex;
   flex-direction: column;
 }
 
-/* sharp, unblurred photo — fills all remaining space above the footer */
+/* sharp photo, selective-color source (b&w crowd, subject in natural color)
+   — background-color:#000 shows through wherever opacity lets the photo
+   thin out, so it blends to true black rather than a muddy gray. Kept the
+   filter gentle here since the source photo's grade is already the look
+   we want, not something to correct. */
 .moment-photo{
   position: relative;
   flex: 1 1 auto;
   min-height: 0;
-  opacity: 0.9;
+  opacity: 0.96;
+  background-color: #000;
   background-image: var(--bg-image);
   background-position: var(--bg-position, 50% 50%);
   background-size: cover;
-  filter: contrast(0.72) brightness(0.96) saturate(1.05);
-}
-
-/* colorful spectrum wash over the photo — mix-blend-mode: color tints the
-   image with hue while leaving its own luminance/detail intact, so it reads
-   as light washing over the photo rather than a flat color layer on top */
-.moment-wash{
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 18% 20%, rgba(255,110,170,0.55), transparent 55%),
-    radial-gradient(circle at 82% 12%, rgba(255,195,90,0.5), transparent 55%),
-    radial-gradient(circle at 12% 88%, rgba(80,220,190,0.5), transparent 58%),
-    radial-gradient(circle at 88% 82%, rgba(100,140,255,0.55), transparent 58%),
-    radial-gradient(circle at 50% 50%, rgba(190,110,255,0.35), transparent 62%);
-  mix-blend-mode: color;
-  opacity: 0.3;
+  filter: contrast(0.94) brightness(0.99) saturate(1.05);
 }
 
 /* thin spectrum strip along the top edge of each photo — the brand's
